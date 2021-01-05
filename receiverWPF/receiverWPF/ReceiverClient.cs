@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
+
 
 public class ReceiverClient
 {
@@ -15,7 +15,7 @@ public class ReceiverClient
     const string HOST = "127.0.0.1";
     const int PORT = 8888;
     const string CHANNEL = "abc";
-    byte SENDER = Byte.Parse("1");
+    byte RECEIVER = Byte.Parse("2");
     private Boolean isSuccessConn = false;
     const string OK_MESSAGE = "OK";
 
@@ -31,7 +31,7 @@ public class ReceiverClient
 
         byte[] headerBytes = new byte[headerChannelBytes.Length + 1];
         headerChannelBytes.CopyTo(headerBytes, 1);
-        headerBytes[0] = SENDER;
+        headerBytes[0] = RECEIVER;
         return (headerBytes);
     }
 
@@ -56,14 +56,6 @@ public class ReceiverClient
         this.Socket?.Dispose();
     }
 
-    // メッセージの送信(同期処理)
-    public void send(string message)
-    {
-        var sendBytes = new ASCIIEncoding().GetBytes(message);
-        this.Socket.Send(sendBytes);
-    }
-
-
     public delegate void ShowMessage(string message);
     ShowMessage showMessage;
     public void setShowMessage(ShowMessage _showMessage)
@@ -84,7 +76,7 @@ public class ReceiverClient
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            MessageBox.Show(ex.Message);
             return;
         }
 
@@ -93,7 +85,7 @@ public class ReceiverClient
         if (byteSize > 0)
         {
             string message = new ASCIIEncoding().GetString(this.Buffer, 0, byteSize);
-            MessageBox.Show(message);
+
             if (isSuccessConn)
             {
                 showMessage(message);
