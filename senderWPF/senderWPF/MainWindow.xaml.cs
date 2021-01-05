@@ -25,20 +25,14 @@ namespace chatWPF
         {
             InitializeComponent();
             client.connect();
-
-            ShowMessage showMessage = this.showMessage;
-            client.setShowMessage(showMessage);
         }
 
         SenderClient client = new SenderClient();
-        void showMessage(string message)
-        {
-            messages.Text += "・" + input.Text + "\n";
-        }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
             client.send(input.Text);
+            messages.Text += "・「" + input.Text + "」を送信しました\n";
             input.Clear();
         }
 

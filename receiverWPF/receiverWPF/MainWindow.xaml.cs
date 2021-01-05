@@ -33,18 +33,11 @@ namespace chatWPF
         ReceiverClient client = new ReceiverClient();
         void showMessage(string message)
         {
-            messages.Text += "・" + input.Text + "\n";
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            client.send(input.Text);
-            input.Clear();
-        }
-
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            // ↓messagesが呼び出し元では別スレッドにあたるため対処
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                messages.Text += "・" + message + "\n";
+            }));
         }
     }
 }

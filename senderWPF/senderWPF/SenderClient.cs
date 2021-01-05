@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
+
 
 public class SenderClient
 {
@@ -63,14 +63,6 @@ public class SenderClient
         this.Socket.Send(sendBytes);
     }
 
-
-    public delegate void ShowMessage(string message);
-    ShowMessage showMessage;
-    public void setShowMessage(ShowMessage _showMessage)
-    {
-        this.showMessage = _showMessage;
-    }
-
     // 非同期受信のコールバックメソッド(別スレッドで実行される)
     private void ReceiveCallback(IAsyncResult asyncResult)
     {
@@ -84,7 +76,7 @@ public class SenderClient
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            MessageBox.Show(ex.Message);
             return;
         }
 
@@ -93,11 +85,8 @@ public class SenderClient
         if (byteSize > 0)
         {
             string message = new ASCIIEncoding().GetString(this.Buffer, 0, byteSize);
-            MessageBox.Show(message);
-            if (isSuccessConn)
-            {
-                showMessage(message);
-            }
+
+            if (isSuccessConn){}
             else
             {
                 if (message == OK_MESSAGE)
